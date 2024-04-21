@@ -6,10 +6,10 @@ using UnityEngine.Rendering.Universal;
 
 public class ChessPiece : MonoBehaviour
 {
-    protected BoardManager board;
+    public BoardManager board;
     TMP_Text text;
     
-    [SerializeField] protected PColor _color;
+    public PColor _color;
     public PColor PieceColor {
         get => _color;
         set {
@@ -28,7 +28,8 @@ public class ChessPiece : MonoBehaviour
         }
     }
 
-    [SerializeField] protected Vector3Int _position;
+    public bool moved;
+    [SerializeField] public Vector3Int _position;
     public Vector3Int Position {
         get => _position;
         set {
@@ -40,6 +41,7 @@ public class ChessPiece : MonoBehaviour
                 board.SetPiece(value, this);
             }
             transform.position = board.WorldPos(value);
+            moved = true;
         }
     }
     public int rank {
@@ -62,8 +64,7 @@ public class ChessPiece : MonoBehaviour
     private bool _initialized = false;
     // Start is called before the first frame update
     void Start() {
-        Debug.Log(name);
-        board = GetComponentInParent<BoardManager>();
+        //board = GetComponentInParent<BoardManager>();
         text = GetComponentInChildren<TMP_Text>();
 
         Position = _position;
@@ -71,6 +72,8 @@ public class ChessPiece : MonoBehaviour
         PieceColor = _color;
 
         _initialized = true;
+
+        moved = false;
     }
 
     public bool captured = false;

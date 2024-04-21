@@ -6,6 +6,13 @@ using UnityEngine.Tilemaps;
 
 public class BoardManager : MonoBehaviour
 {
+    [SerializeField] ChessPiece pawn;
+    [SerializeField] ChessPiece rook;
+    [SerializeField] ChessPiece knight;
+    [SerializeField] ChessPiece bishop;
+    [SerializeField] ChessPiece king;
+    [SerializeField] ChessPiece queen;
+
     [SerializeField] Tilemap squareMap;
 
     [SerializeField] TileBase darkSquare;
@@ -21,6 +28,18 @@ public class BoardManager : MonoBehaviour
         for(int r = 0; r < 8; ++r) {
             for(int c = 0; c < 8; ++c) {
                 squareMap.SetTile(new Vector3Int(r, c, 0), (r + c) % 2 == 0 ? darkSquare : lightSquare);
+            }
+        }
+
+        foreach(int color in new int[] {0, 1}) {
+            int file;
+            for(file = 0; file < 8; ++file) {
+                AddPiece(pawn, file, 1 + 5 * color, color);
+            }
+            file = 0;
+            ChessPiece[] backRank = { rook, knight, bishop, queen, king, bishop, knight, rook };
+            foreach(ChessPiece next in backRank) {
+                AddPiece(next, file++, color * 7, color);
             }
         }
     }
@@ -51,6 +70,13 @@ public class BoardManager : MonoBehaviour
                 CancelMove();
             }
         }
+    }
+
+    void AddPiece(ChessPiece piece, int file, int rank, int color) {
+        piece._position = new Vector3Int(file, rank);
+        piece.board = this;
+        piece._color = (PColor)color;
+        Instantiate(piece);
     }
     
     void capture(ChessPiece piece) {

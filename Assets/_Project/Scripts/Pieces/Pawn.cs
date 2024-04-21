@@ -6,10 +6,8 @@ using UnityEngine;
 public class Pawn : ChessPiece
 {
     public override IEnumerable<Vector3Int> ValidMoves(bool xray = false) {
-        int startingRank = 1;
         int moveDirection = 1;
         if(PieceColor == PColor.Black) {
-            startingRank = 7;
             moveDirection = -1;
         }
         Vector3Int target;
@@ -26,7 +24,7 @@ public class Pawn : ChessPiece
                 break;
 
             yield return target;
-            if(rank != startingRank)
+            if(moved)
                 break;
         }
     }
