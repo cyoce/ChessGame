@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Bishop : Slider
 {
+    public override int value() => 3;
     public override IEnumerable<Vector3Int> ValidMoves(bool xray = false) {
         foreach(int r in plusminus) {
             foreach(int f in plusminus) {

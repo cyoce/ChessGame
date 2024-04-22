@@ -62,6 +62,7 @@ public class ChessPiece : MonoBehaviour
     }
 
     private bool _initialized = false;
+    virtual public int value() => 1;
     // Start is called before the first frame update
     void Start() {
         //board = GetComponentInParent<BoardManager>();
@@ -89,6 +90,10 @@ public class ChessPiece : MonoBehaviour
 
     virtual public IEnumerable<Vector3Int> ValidMoves(bool xray=false) { // override per piece
         yield break;
+    }
+
+    virtual public IEnumerable<Vector3Int> ControlSquares() {
+        return ValidMoves(false);
     }
 }
 

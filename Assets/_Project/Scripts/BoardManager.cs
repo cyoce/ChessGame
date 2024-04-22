@@ -94,12 +94,12 @@ public class BoardManager : MonoBehaviour
                 Debug.Log(s);
             }
         }
-
+        if(!playing) return;
         if(Turn == computer) {
             BotMove();
             return;
         }
-        if(Input.GetMouseButtonDown(0) && playing) {
+        if(Input.GetMouseButtonDown(0)) {
             Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector3Int boardPos = squareMap.WorldToCell(worldPos);
             if(Contains(boardPos)) {
@@ -150,7 +150,7 @@ public class BoardManager : MonoBehaviour
                     foreach(ChessPiece controller in pieces[i]) {
                         if(controller == capped) continue;
                         
-                        foreach(Vector3Int pos in controller.ValidMoves()) {
+                        foreach(Vector3Int pos in controller.ControlSquares()) {
                             control[pos.x, pos.y] += incrementer;
                         }
                     }
@@ -161,7 +161,12 @@ public class BoardManager : MonoBehaviour
                         float c = control[f, r];
                         ChessPiece king = pieces[c > 0 ? 1 - tIdx : tIdx][4];
                         float dist = Manhattan(king.Position, mover.Position);
-                        score += c / math.pow(1 + dist, 2);
+                        float mult = 1;
+                        if(GetPiece(f, r) is ChessPiece p) {
+                            mult += p.value();
+                        }
+                        mult += 10 / math.pow(1 + dist, 2);
+                        score += c * mult;
                     }
                 }
                 Debug.Log(score);

@@ -5,7 +5,12 @@ using UnityEngine;
 
 public class Pawn : ChessPiece
 {
+    public override int value() => 1;
+
     public override IEnumerable<Vector3Int> ValidMoves(bool xray = false) {
+        return ValidMoves(xray, true);
+    }
+    public IEnumerable<Vector3Int> ValidMoves(bool xray = false, bool advancing = true) {
         int moveDirection = 1;
         if(PieceColor == PColor.Black) {
             moveDirection = -1;
@@ -19,6 +24,8 @@ public class Pawn : ChessPiece
                 yield return target;
             }
         }
+        if(!advancing) yield break;
+
         target = Position;
         for(int i = 0; i < 2; ++i) {
             target.y += moveDirection;
@@ -29,5 +36,8 @@ public class Pawn : ChessPiece
             if(moved)
                 break;
         }
+    }
+    public override IEnumerable<Vector3Int> ControlSquares() {
+        return ValidMoves(false, false);
     }
 }

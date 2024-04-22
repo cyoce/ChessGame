@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Knight : ChessPiece {
+
+    public override int value() => 3;
     public override IEnumerable<Vector3Int> ValidMoves(bool xray=false) {
         foreach(int dx in new int[]{ 1, 2 }){
             int dy = 3 - dx;

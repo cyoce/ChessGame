@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class King : ChessPiece
 {
+    public override int value() => 15;
     public override IEnumerable<Vector3Int> ValidMoves(bool xray = false) {
         for(int i=-1; i<=1; ++i) {
             for(int j=-1; j<=1; ++j) {
