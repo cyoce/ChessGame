@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
 
@@ -33,7 +34,7 @@ public class BoardManager : MonoBehaviour
 
     bool playing = true;
 
-    PColor? computer = PColor.Black;
+    PColor? computer = null;
 
     PColor _turn = PColor.White;
     public PColor Turn {
@@ -144,6 +145,8 @@ public class BoardManager : MonoBehaviour
             SetPiece(origin, null);
             foreach(Vector3Int move in mover.ValidMoves()) {
                 ChessPiece capped = SetPiece(move, mover);
+                float score = 0;
+                if(capped != null) score += capped.value();
                 if(capped is King k) {
                     highScore = float.MaxValue;
                     topMover = mover;
@@ -163,12 +166,11 @@ public class BoardManager : MonoBehaviour
                         }
                     }
                 }
-                float score = 0;
                 for(int r=0; r<8; ++r) {
                     for(int f=0; f<8; ++f) {
                         float c = control[f, r];
                         ChessPiece king = pieces[c > 0 ? 1 - tIdx : tIdx][4];
-                        float dist = Manhattan(king.Position, mover.Position);
+                        float dist = Manhattan(king.Position, new Vector3Int(f, r));
                         float mult = 1;
                         if(GetPiece(f, r) is ChessPiece p) {
                             mult += p.value();
@@ -273,5 +275,19 @@ public class BoardManager : MonoBehaviour
 
     public Vector3 WorldPos(Vector3Int position) {
         return squareMap.CellToWorld(position);
+    }
+
+    public void btn_blackai() {
+        computer = PColor.Black;
+    }
+    public void btn_whiteai() {
+        computer = PColor.White;
+    }
+    public void btn_friend() {
+        computer = null;
+    }
+
+    public void btn_reset() {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

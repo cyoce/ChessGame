@@ -83,12 +83,12 @@ public class ChessPiece : MonoBehaviour
         return false;
     }
 
-    virtual public IEnumerable<Vector3Int> ValidMoves(bool xray=false) { // override per piece
+    virtual public IEnumerable<Vector3Int> ValidMoves(bool xray=false, bool control=false) { // override per piece
         yield break;
     }
 
     virtual public IEnumerable<Vector3Int> ControlSquares() {
-        return ValidMoves(false);
+        return ValidMoves(false, true);
     }
 }
 

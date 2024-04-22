@@ -7,10 +7,7 @@ public class Pawn : ChessPiece
 {
     public override int value() => 1;
 
-    public override IEnumerable<Vector3Int> ValidMoves(bool xray = false) {
-        return ValidMoves(xray, true);
-    }
-    public IEnumerable<Vector3Int> ValidMoves(bool xray = false, bool advancing = true) {
+    public override IEnumerable<Vector3Int> ValidMoves(bool xray = false, bool control = false) {
         int moveDirection = 1;
         if(PieceColor == PColor.Black) {
             moveDirection = -1;
@@ -20,15 +17,17 @@ public class Pawn : ChessPiece
             target = new Vector3Int(sign, moveDirection) + Position;
             if(!board.Contains(target)) continue;
             
-            if(board.GetPiece(target)?.PieceColor == (PColor)(1 - (int) PieceColor)) {
+            if(control || board.GetPiece(target)?.PieceColor == (PColor)(1 - (int) PieceColor)) {
                 yield return target;
             }
         }
-        if(!advancing) yield break;
+        if(control) yield break;
 
         target = Position;
         for(int i = 0; i < 2; ++i) {
             target.y += moveDirection;
+            if(!board.Contains(target))
+                break;
             if(board.GetPiece(target) != null)
                 break;
 
@@ -38,6 +37,6 @@ public class Pawn : ChessPiece
         }
     }
     public override IEnumerable<Vector3Int> ControlSquares() {
-        return ValidMoves(false, false);
+        return ValidMoves(false, true);
     }
 }

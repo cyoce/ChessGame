@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -16,7 +15,7 @@ public class Slider : ChessPiece
                 yield break;
 
             ChessPiece captured = board.GetPiece(target);
-            if(!xray && captured?.PieceColor == PieceColor)
+            if(!xray && !control && captured?.PieceColor == PieceColor)
                 yield break;
 
             yield return target;
