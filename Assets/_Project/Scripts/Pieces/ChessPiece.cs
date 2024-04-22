@@ -15,7 +15,7 @@ public class ChessPiece : MonoBehaviour
         set {
             switch(value) {
                 case PColor.White:
-                    rendy.color = new Color(0.6f, 0.5f, 0.4f);
+                    rendy.color = Color.white;// new Color(0.6f, 0.5f, 0.4f);
                     break;
                 case PColor.Black:
                     rendy.color = Color.black;

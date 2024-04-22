@@ -7,7 +7,7 @@ using UnityEngine.Assertions;
 
 public class Slider : ChessPiece
 {
-    public IEnumerable<Vector3Int> ScanMoves(Vector3Int direction, bool xray = false) {
+    public IEnumerable<Vector3Int> ScanMoves(Vector3Int direction, bool xray = false, bool control=false) {
         Assert.AreNotEqual(direction, Vector3Int.zero);
         Vector3Int target = Position;
         while(true) {

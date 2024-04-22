@@ -17,9 +17,11 @@ public class BoardManager : MonoBehaviour
     [SerializeField] ChessPiece queen;
 
     [SerializeField] Tilemap squareMap;
+    [SerializeField] Tilemap previewMap;
 
     [SerializeField] TileBase darkSquare;
     [SerializeField] TileBase lightSquare;
+    [SerializeField] TileBase circle;
 
     [SerializeField] TMP_Text whiteMoveLabel;
     [SerializeField] TMP_Text blackMoveLabel;
@@ -110,6 +112,12 @@ public class BoardManager : MonoBehaviour
                     } else {
                         moveTarget = null;
                     }
+
+                    if(moveTarget != null) {
+                        foreach(Vector3Int move in moveTarget.ValidMoves()) {
+                            previewMap.SetTile(move, circle);
+                        }
+                    } 
                     
                 } else if(GetPiece(boardPos) == moveTarget || !moveTarget.CanMove(boardPos)){ // user has clicked on the selected piece's current square
                     CancelMove();
@@ -120,6 +128,9 @@ public class BoardManager : MonoBehaviour
             } else if(moveTarget != null) {
                 CancelMove();
             }
+        }
+        if(moveTarget == null) {
+            previewMap.ClearAllTiles();
         }
     }
 
@@ -132,7 +143,6 @@ public class BoardManager : MonoBehaviour
             Vector3Int origin = new Vector3Int (mover._position.x, mover._position.y);
             SetPiece(origin, null);
             foreach(Vector3Int move in mover.ValidMoves()) {
-                Debug.Log(": " + move);
                 ChessPiece capped = SetPiece(move, mover);
                 if(capped is King k) {
                     highScore = float.MaxValue;
@@ -167,7 +177,6 @@ public class BoardManager : MonoBehaviour
                         score += c * mult;
                     }
                 }
-                Debug.Log(score);
                 if(score > highScore) {
                     highScore = score;
                     topMover = mover;
@@ -220,9 +229,11 @@ public class BoardManager : MonoBehaviour
     void Capture(ChessPiece piece) {
         piece.captured = true;
         int color = (int)piece.PieceColor;
-        List<ChessPiece> list = captures[color];
-        piece.Position = new Vector3Int(list.Count, 8 - 9 * color);
-        list.Add(piece);
+        List<ChessPiece> caps = captures[color];
+        piece.Position = new Vector3Int(caps.Count, 9 - 11 * color);
+        caps.Add(piece);
+        List<ChessPiece> reg = pieces[color];
+        reg.Remove(piece);
         if(piece is King k)
             GameOver();
     }
