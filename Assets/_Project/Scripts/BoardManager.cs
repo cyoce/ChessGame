@@ -129,14 +129,12 @@ public class BoardManager : MonoBehaviour
         Vector3Int topMove = new Vector3Int();
         float highScore = float.MinValue;
         foreach(ChessPiece mover in pieces[tIdx]) {
-            Debug.Log("moving " + mover);
             Vector3Int origin = new Vector3Int (mover._position.x, mover._position.y);
             SetPiece(origin, null);
             foreach(Vector3Int move in mover.ValidMoves()) {
                 Debug.Log(": " + move);
                 ChessPiece capped = SetPiece(move, mover);
                 if(capped is King k) {
-                    Debug.Log("King!");
                     highScore = float.MaxValue;
                     topMover = mover;
                     topMove = move;
@@ -199,8 +197,6 @@ public class BoardManager : MonoBehaviour
     }
 
     void MovePiece(Vector3Int pos) {
-        Debug.Log(moveTarget);
-        Debug.Log(moveTarget?.Position + " => " + pos);
         if(GetPiece(pos) is ChessPiece p) {
             Capture(p);
         }
