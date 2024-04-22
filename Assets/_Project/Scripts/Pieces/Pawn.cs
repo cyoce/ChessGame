@@ -13,6 +13,8 @@ public class Pawn : ChessPiece
         Vector3Int target;
         foreach(int sign in plusminus) {
             target = new Vector3Int(sign, moveDirection) + Position;
+            if(!board.Contains(target)) continue;
+            
             if(board.GetPiece(target)?.PieceColor == (PColor)(1 - (int) PieceColor)) {
                 yield return target;
             }

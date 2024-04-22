@@ -8,9 +8,9 @@ public class Knight : ChessPiece {
             int dy = 3 - dx;
             foreach(int xscale  in plusminus) { 
                 foreach(int yscale in plusminus) {
-                    Vector3Int output = Position + new Vector3Int(dx * xscale, dy * yscale);
-                    if(board.Contains(output)) {
-                        yield return output;
+                    Vector3Int target = Position + new Vector3Int(dx * xscale, dy * yscale);
+                    if(board.Contains(target) && board.GetPiece(target)?.PieceColor != PieceColor) {
+                        yield return target;
                     }
                 }
             }
